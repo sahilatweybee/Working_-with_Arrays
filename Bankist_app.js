@@ -63,7 +63,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 const displayMovements = function (movements) {
     containerMovements.innerHTML = '';
-    
+
     movements.forEach(function (mov, i) {
         const type = mov > 0 ? 'deposit' : 'withdrawal';
         const html = `
@@ -72,7 +72,27 @@ const displayMovements = function (movements) {
         <div class="movements__value">${mov}</div>
       </div>`;
 
-      containerMovements.insertAdjacentHTML('afterbegin', html);
+        containerMovements.insertAdjacentHTML('afterbegin', html);
     });
 }
 displayMovements(account1.movements);
+
+const calcDisplayBalance = function(movements){
+    let balance = movements.reduce((acc, mov) => acc+mov,0);
+    labelBalance.textContent = `${balance} EUR`;
+}
+calcDisplayBalance(account1.movements);
+
+let createUserNames = function (accs) {
+
+    accs.forEach(function (acc){
+        acc.userName = acc.owner
+        .toLowerCase()
+        .split(' ')
+        .map(name => name[0])
+        .join('');
+    });
+};
+createUserNames(accounts);
+console.log(accounts);
+
