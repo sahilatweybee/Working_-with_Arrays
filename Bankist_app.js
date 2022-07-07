@@ -113,13 +113,19 @@ btnLogin.addEventListener('click', function (e) {
     e.preventDefault();
     currentAccount = accounts.find(acc => acc.userName ===
         inputLoginUsername.value);
-    console.log(currentAccount);
+    // console.log(currentAccount);
     if (currentAccount?.pin === Number(inputLoginPin.value)) {
-        // TODO: DIsplay/Update the ui.
+        //TODO: DIsplay/Update the ui.
         labelWelcome.textContent = `welcome back ${currentAccount.owner.split(' ')[0]}`;
-        containerApp.style.opacity = '100%';
-    }
-    calcDisplaySummary(currentAccount.movements);
-    displayMovements(currentAccount.movements);
+        containerApp.style.opacity = 100;
+
+        displayMovements(currentAccount.movements);
     calcDisplayBalance(currentAccount.movements);
+    calcDisplaySummary(currentAccount.movements);
+    }else{
+        alert("Invalid UserName or Password!!");
+    }
+
+    inputLoginPin.value = inputLoginUsername.value = '';
+    inputLoginPin.blur();
 });
