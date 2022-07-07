@@ -57,10 +57,10 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+const displayMovements = function (acc) {
     containerMovements.innerHTML = '';
 
-    movements.forEach(function (mov, i) {
+    acc.movements.forEach(function (mov, i) {
         const type = mov > 0 ? 'deposit' : 'withdrawal';
         const html = `
         <div class="movements__row">
@@ -72,22 +72,22 @@ const displayMovements = function (movements) {
     });
 }
 
-const calcDisplayBalance = function (movements) {
-    let balance = movements.reduce((acc, mov) => acc + mov, 0);
-    labelBalance.textContent = `${balance}€`;
+const calcDisplayBalance = function (acc) {
+    acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+    labelBalance.textContent = `${acc.balance}€`;
 }
 
-const calcDisplaySummary = function (movements) { 
-    let incomes = movements.filter(mov => mov > 0)
+const calcDisplaySummary = function (acc) {
+    let incomes = acc.movements.filter(mov => mov > 0)
         .reduce((acc, mov) => acc + mov, 0);
 
-    let outgoings = movements.filter(mov => mov < 0)
+    let outgoings = acc.movements.filter(mov => mov < 0)
         .reduce((acc, mov) => acc + mov, 0);
 
     labelSumIn.textContent = `${incomes}€`;
     labelSumOut.textContent = `${Math.abs(outgoings)}€`;
 
-    let interest = movements.filter(mov => mov > 0)
+    let interest = acc.movements.filter(mov => mov > 0)
         .map(deposit => deposit * currentAccount.interestRate / 100)
         .filter((int, i, arr) => {
             return int >= 1;
@@ -108,6 +108,12 @@ let createUserNames = function (accs) {
 createUserNames(accounts);
 // console.log(accounts);
 
+const updateUI = function (acc) {
+    displayMovements(acc);
+    calcDisplayBalance(acc);
+    calcDisplaySummary(acc);
+}
+
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
     e.preventDefault();
@@ -119,13 +125,61 @@ btnLogin.addEventListener('click', function (e) {
         labelWelcome.textContent = `welcome back ${currentAccount.owner.split(' ')[0]}`;
         containerApp.style.opacity = 100;
 
-        displayMovements(currentAccount.movements);
-    calcDisplayBalance(currentAccount.movements);
-    calcDisplaySummary(currentAccount.movements);
-    }else{
+        updateUI(currentAccount);
+    } else {
         alert("Invalid UserName or Password!!");
     }
 
     inputLoginPin.value = inputLoginUsername.value = '';
     inputLoginPin.blur();
 });
+
+btnTransfer.addEventListener('click', function (e) {
+    e.preventDefault();
+    let receiverAcc = accounts.find(acc => acc.userName === inputTransferTo.value);
+    let transferAmount = Number(inputTransferAmount.value);
+    if (
+        transferAmount > 0 &&
+        receiverAcc &&
+        currentAccount.balance >= transferAmount &&
+        receiverAcc?.userName !==
+        currentAccount.userName
+    ) {
+        currentAccount.movements.push(-transferAmount);
+        receiverAcc.movements.push(transferAmount);
+        updateUI(currentAccount);
+
+    } else {
+        alert("Please check wether you have entered correct user name and appropriate amount!");
+    }
+    inputTransferTo.value = inputTransferAmount.value = '';
+    inputTransferAmount.blur();
+});
+
+btnClose.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (inputCloseUsername.value === currentAccount.userName &&
+        Number(inputClosePin.value) === currentAccount.pin) {
+        let index = accounts.findIndex(acc => acc.userName === currentAccount.userName);
+        accounts.splice(index, 1);
+
+        inputCloseUsername.value = inputClosePin.value = '';
+        containerApp.style.opacity = 0;
+    }
+});
+
+btnLoan.addEventListener('click', function (e) {
+    e.preventDefault();
+  
+    const amount = Number(inputLoanAmount.value);
+  
+    if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+      currentAccount.movements.push(amount);
+      updateUI(currentAccount);
+    }else if(amount < 0){
+        alert("Loan Amount can't be negative.");
+    }else{
+        alert(`You Don't match the criteria to get this Loan because you require arleast one deposit tha is higher than ${amount*0.1}!`);
+    }
+    inputLoanAmount.value = '';
+  });

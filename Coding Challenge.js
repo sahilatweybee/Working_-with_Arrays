@@ -1,7 +1,7 @@
 'use strict';
 
+//////////////////////////////////////////
 // Coding_Challenge-1
-
 const checkDogs = function (dogsJulia, dogsKate) {
     let newDogsJulia = dogsJulia.slice();
     newDogsJulia.splice(0, 1);
@@ -19,6 +19,7 @@ const checkDogs = function (dogsJulia, dogsKate) {
 checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
 checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
 
+//////////////////////////////////////////
 // coding challenge-2
 const calcAverageHumanAge = function (ages) {
     let humanAges = ages.map(age =>
@@ -37,7 +38,7 @@ const calcAverageHumanAge = function (ages) {
 calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 
-
+//////////////////////////////////////////
 // coding challenge-3
 const calcAverageHumanAgeArrow = ages => {
     let result = ages
@@ -50,3 +51,32 @@ const calcAverageHumanAgeArrow = ages => {
 
 calcAverageHumanAgeArrow([5, 2, 4, 1, 15, 8, 3]);
 calcAverageHumanAgeArrow([16, 6, 10, 5, 6, 1, 4]);
+
+
+
+
+//////////////////////////////////////////
+// Swaping Arrays
+let x1 = [1, 2, 3, 4, 9];
+let y1 = [5, 6, 7, 8];
+console.log(`\nx1: ${x1}\ny1: ${y1}`);
+
+x1 = x1.concat(y1);
+y1 = x1.slice(0, -y1.length);
+x1 = x1.slice(y1.length);
+console.log(`\nx1: ${x1}\ny1: ${y1}`);
+
+
+//////////////////////////////////////////
+// Concatinating and Modifying Arrays
+let array1 = [1,2,3,4,5];
+let array2 = [6,7,8,9,10];
+let output = [];
+
+let i = 0;
+while(i < array1.length){
+  output.push(array2[i], array1[array1.length-i-1]);
+  i++;
+}
+console.log(`\n${output}`);
+
