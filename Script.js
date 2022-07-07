@@ -1,5 +1,35 @@
 'use strict';
 
+const account1 = {
+  owner: 'Jonas Schmedtmann',
+  movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+  interestRate: 1.2, // %
+  pin: 1111,
+};
+
+const account2 = {
+  owner: 'Jessica Davis',
+  movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+  interestRate: 1.5,
+  pin: 2222,
+};
+
+const account3 = {
+  owner: 'Steven Thomas Williams',
+  movements: [200, -200, 340, -300, -20, 50, 400, -460],
+  interestRate: 0.7,
+  pin: 3333,
+};
+
+const account4 = {
+  owner: 'Sarah Smith',
+  movements: [430, 1000, 700, 50, 90],
+  interestRate: 1,
+  pin: 4444,
+};
+
+const accounts = [account1, account2, account3, account4];
+
 const currencies = new Map([
   ['USD', 'United States dollar'],
   ['EUR', 'Euro'],
@@ -104,7 +134,7 @@ currencies.forEach(function (value, key, map) {
 const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
 console.log(currenciesUnique);
 currenciesUnique.forEach(function (value, _, map) {
-  console.log(`${value}: ${value}`);
+  console.log(`${value}: ${value}`); 
 });
 */
 
@@ -123,12 +153,13 @@ console.log(movements);
 console.log(movementsUSD);
 
 const movementsUSDfor = [];
-for (const mov of movements) movementsUSDfor.push(mov * eurToUsd);
+for (const mov of movements)
+  movementsUSDfor.push(mov * eurToUsd);
 console.log(movementsUSDfor);
 
-const movementsDescriptions = movements.map( (mov, i) =>
-    `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(mov
-    )}`
+const movementsDescriptions = movements.map((mov, i) =>
+  `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'}
+  ${Math.abs(mov)}`,
 );
 console.log(movementsDescriptions);
 */
@@ -139,19 +170,19 @@ console.log(movementsDescriptions);
 const deposits = movements.filter(function (mov, i, arr) {
   return mov > 0;
 });
-console.log(movements);
-console.log(deposits);
+console.log(`\nMovements: ${movements}`);
+console.log(`\nDeposits: ${deposits }`);
 
 const depositsFor = [];
 for (const mov of movements) if (mov > 0) depositsFor.push(mov);
-console.log(depositsFor);
+console.log(`\nDepositsFor: ${depositsFor}`);
 
 const withdrawals = movements.filter(mov => mov < 0);
-console.log(withdrawals);
+console.log(`\nWithdrawals: ${withdrawals}`);
 */
 
 /*
-///////////////////////////////////////
+///////////////////////////////////////        
 // The reduce Method
 console.log(movements);
 
@@ -175,6 +206,7 @@ const max = movements.reduce((acc, mov) => {
 console.log(max);
 */
 
+/*
 ///////////////////////////////////////
 // The Magic of Chaining Methods
 const eurToUsd = 1.1;
@@ -190,3 +222,17 @@ const totalDepositsUSD = movements
   // .map(mov => mov * eurToUsd)
   .reduce((acc, mov) => acc + mov, 0);
 console.log(totalDepositsUSD);
+*/
+
+/*
+///////////////////////////////////////
+// The find Method
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(movements);
+console.log(firstWithdrawal);
+
+// console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
+*/

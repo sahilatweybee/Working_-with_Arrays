@@ -1,9 +1,5 @@
 'use strict';
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// BANKIST APP
-
 // Data
 const account1 = {
     owner: 'Jonas Schmedtmann',
@@ -75,44 +71,56 @@ const displayMovements = function (movements) {
         containerMovements.insertAdjacentHTML('afterbegin', html);
     });
 }
-displayMovements(account1.movements);
 
-const calcDisplayBalance = function(movements){
-    let balance = movements.reduce((acc, mov) => acc+mov,0);
+const calcDisplayBalance = function (movements) {
+    let balance = movements.reduce((acc, mov) => acc + mov, 0);
     labelBalance.textContent = `${balance}€`;
 }
-calcDisplayBalance(account1.movements);
 
-const calcDisplaySummary = function(movements){
+const calcDisplaySummary = function (movements) {
     let incomes = movements.filter(mov => mov > 0)
-    .reduce((acc, mov) => acc + mov, 0);
+        .reduce((acc, mov) => acc + mov, 0);
 
     let outgoings = movements.filter(mov => mov < 0)
-    .reduce((acc, mov) => acc + mov, 0);
+        .reduce((acc, mov) => acc + mov, 0);
 
     labelSumIn.textContent = `${incomes}€`;
     labelSumOut.textContent = `${Math.abs(outgoings)}€`;
 
     let interest = movements.filter(mov => mov > 0)
-    .map(deposit => deposit * 1.2/100 )
-    .filter((int, i, arr) => {
-        return int >= 1;
-    })
-    .reduce((acc, int) => acc+int, 0);
+        .map(deposit => deposit * 1.2 / 100)
+        .filter((int, i, arr) => {
+            return int >= 1;
+        })
+        .reduce((acc, int) => acc + int, 0);
     labelSumInterest.textContent = `${interest}€`;
 };
-calcDisplaySummary(account1.movements);
 
 let createUserNames = function (accs) {
 
-    accs.forEach(function (acc){
+    accs.forEach(function (acc) {
         acc.userName = acc.owner
-        .toLowerCase()
-        .split(' ')
-        .map(name => name[0])
-        .join('');
+            .toLowerCase()
+            .split(' ')
+            .map(name => name[0])
+            .join('');
     });
 };
 createUserNames(accounts);
-console.log(accounts);
+// console.log(accounts);
 
+let currentAccount;
+btnLogin.addEventListener('click', function (e) {
+    e.preventDefault();
+    currentAccount = accounts.find(acc => acc.userName ===
+        inputLoginUsername.value);
+    console.log(currentAccount);
+    if (currentAccount?.pin === Number(inputLoginPin.value)) {
+        // TODO: DIsplay/Update the ui.
+        labelWelcome.textContent = `welcome back ${currentAccount.owner.split(' ')[0]}`;
+        containerApp.style.opacity = '100%';
+    }
+    calcDisplaySummary(currentAccount.movements);
+    displayMovements(currentAccount.movements);
+    calcDisplayBalance(currentAccount.movements);
+});
