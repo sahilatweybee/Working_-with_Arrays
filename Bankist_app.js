@@ -77,7 +77,7 @@ const calcDisplayBalance = function (movements) {
     labelBalance.textContent = `${balance}€`;
 }
 
-const calcDisplaySummary = function (movements) {
+const calcDisplaySummary = function (movements) { 
     let incomes = movements.filter(mov => mov > 0)
         .reduce((acc, mov) => acc + mov, 0);
 
@@ -88,7 +88,7 @@ const calcDisplaySummary = function (movements) {
     labelSumOut.textContent = `${Math.abs(outgoings)}€`;
 
     let interest = movements.filter(mov => mov > 0)
-        .map(deposit => deposit * 1.2 / 100)
+        .map(deposit => deposit * currentAccount.interestRate / 100)
         .filter((int, i, arr) => {
             return int >= 1;
         })
@@ -97,7 +97,6 @@ const calcDisplaySummary = function (movements) {
 };
 
 let createUserNames = function (accs) {
-
     accs.forEach(function (acc) {
         acc.userName = acc.owner
             .toLowerCase()
