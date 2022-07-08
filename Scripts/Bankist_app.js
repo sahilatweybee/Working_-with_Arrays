@@ -57,10 +57,12 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (acc) {
+const displayMovements = function (acc, sort = false) {
     containerMovements.innerHTML = '';
 
-    acc.movements.forEach(function (mov, i) {
+    let transactions = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
+ 
+    transactions.forEach(function (mov, i) {
         const type = mov > 0 ? 'deposit' : 'withdrawal';
         const html = `
         <div class="movements__row">
@@ -142,15 +144,15 @@ btnTransfer.addEventListener('click', function (e) {
         transferAmount > 0 &&
         receiverAcc &&
         currentAccount.balance >= transferAmount &&
-        receiverAcc?.userName !==
-        currentAccount.userName
+        receiverAcc?.userName !== currentAccount.userName
     ) {
         currentAccount.movements.push(-transferAmount);
         receiverAcc.movements.push(transferAmount);
         updateUI(currentAccount);
 
     } else {
-        alert("Please check wether you have entered correct user name and appropriate amount!");
+        alert(`Please check wether you have entered correct user name and appropriate 
+        amount!`);
     }
     inputTransferTo.value = inputTransferAmount.value = '';
     inputTransferAmount.blur();
@@ -170,16 +172,23 @@ btnClose.addEventListener('click', function (e) {
 
 btnLoan.addEventListener('click', function (e) {
     e.preventDefault();
-  
+
     const amount = Number(inputLoanAmount.value);
-  
+
     if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-      currentAccount.movements.push(amount);
-      updateUI(currentAccount);
-    }else if(amount < 0){
+        currentAccount.movements.push(amount);
+        updateUI(currentAccount);
+    } else if (amount < 0) {
         alert("Loan Amount can't be negative.");
-    }else{
-        alert(`You Don't match the criteria to get this Loan because you require arleast one deposit tha is higher than ${amount*0.1}!`);
+    } else {
+        alert(`You Don't match the criteria to get this Loan because you require arleast one deposit tha is higher than ${amount * 0.1}!`);
     }
     inputLoanAmount.value = '';
-  });
+});
+
+let sorted = false
+btnSort.addEventListener('click', function(e){
+    e.preventDefault();
+    displayMovements(currentAccount, !sorted);
+    sorted = !sorted;
+});
