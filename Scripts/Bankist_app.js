@@ -151,8 +151,8 @@ btnTransfer.addEventListener('click', function (e) {
         updateUI(currentAccount);
 
     } else {
-        alert(`Please check wether you have entered correct user name and appropriate 
-        amount!`);
+        alert('Please check wether you have entered correct user name and appropriate '+
+            'amount!');
     }
     inputTransferTo.value = inputTransferAmount.value = '';
     inputTransferAmount.blur();

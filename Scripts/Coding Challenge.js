@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 //////////////////////////////////////////
 // Coding_Challenge-1
 const checkDogs = function (dogsJulia, dogsKate) {
@@ -48,10 +48,50 @@ const calcAverageHumanAgeArrow = ages => {
 
     console.log(result);
 }
-
 calcAverageHumanAgeArrow([5, 2, 4, 1, 15, 8, 3]);
 calcAverageHumanAgeArrow([16, 6, 10, 5, 6, 1, 4]);
+*/
+// Coding Challenge-4
+const dogs = [
+    { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+    { weight: 8, curFood: 200, owners: ['Matilda'] },
+    { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+    { weight: 32, curFood: 340, owners: ['Michael'] },
+];
 
+dogs.forEach(dog => (dog.recFood = Math.trunc(dog.weight ** 0.75 * 28)));
+
+const dogSarah = dogs.find(dog => dog.owners.includes('Sarah'));
+console.log(dogSarah);
+console.log(
+    `Sarah's dog is eating too ${dogSarah.curFood > dogSarah.recFood ? 'much' : 'little'
+    } `
+);
+
+const ownersEatTooMuch = dogs
+    .filter(dog => dog.curFood > dog.recFood)
+    .flatMap(dog => dog.owners);
+// .flat();
+console.log(ownersEatTooMuch);
+
+const ownersEatTooLittle = dogs
+    .filter(dog => dog.curFood < dog.recFood)
+    .flatMap(dog => dog.owners);
+console.log(ownersEatTooLittle);
+
+console.log(`${ownersEatTooMuch.join(' and ')}'s dogs eat too much!`);
+console.log(`${ownersEatTooLittle.join(' and ')}'s dogs eat too little!`);
+
+console.log(dogs.some(dog => dog.curFood === dog.recFood));
+
+const checkEatingOkey = dog => dog.curFood > 0.9 * dog.recFood && dog.curFood < 1.10 * dog.recFood;
+console.log(dogs.some(checkEatingOkey) + "\n");
+
+let okeyEatingDogs = dogs.filter(checkEatingOkey);
+console.log(okeyEatingDogs);
+
+let dogsSorted = dogs.slice().sort((a, b) => a.recFood - b.recFood);
+console.log(dogsSorted);
 
 
 
@@ -69,14 +109,106 @@ console.log(`\nx1: ${x1}\ny1: ${y1}`);
 
 //////////////////////////////////////////
 // Concatinating and Modifying Arrays
-let array1 = [1,2,3,4,5];
-let array2 = [6,7,8,9,10];
+let array1 = [1, 2, 3, 4, 5];
+let array2 = [6, 7, 8, 9, 10];
 let output = [];
-
 let i = 0;
-while(i < array1.length){
-  output.push(array2[i], array1[array1.length-i-1]);
-  i++;
-}
+array2.forEach((arr, i, array) => output.push(arr, array1[array.length - i - 1]));
+
+// while (i < array1.length) {
+//     output.push(array2[i], array1[array1.length - i - 1]);
+//     i++;
+// }
 console.log(`\n${output}`);
 
+//////////////////////////////////////////
+// Employee Object Task
+let employees = [{
+    id: 1,
+    name: 'Sahil'
+}, {
+    id: 2,
+    name: 'Raj'
+},
+{
+    id: 3,
+    name: 'Dev'
+}];
+
+let Addresses = [{
+    id: 1,
+    age: 20,
+    address: [{
+        city: 'Rajkot',
+        state: 'Gujarat',
+        country: 'India'
+    },
+    {
+        city: 'Bhayavadar',
+        state: 'Gujarat',
+        country: 'India'
+
+    }]
+
+},
+{
+    id: 2,
+    age: 25,
+    address: [{
+        city: 'Rajkot',
+        state: 'Gujarat',
+        country: 'India'
+    },
+    {
+        city: 'Rajkot',
+        state: 'Gujarat',
+        country: 'India'
+
+    }]
+
+},
+{
+    id: 3,
+    age: 20,
+    address: [{
+        city: 'Ahmedabad',
+        state: 'Gujarat',
+        country: 'India'
+    },
+    {
+        city: 'Rajkot',
+        state: 'Rajasthan',
+        country: 'India'
+
+    }]
+
+}
+];
+let name;
+let id;
+
+
+const displayEmployeeDetails = function (name) {
+    for (const e of employees) {
+        if (e.name == name) {
+            let Info = employees.map(e => {
+                let add = Addresses.filter(empl => e.name === empl.name);
+                //console.log(add[0])
+
+                if (e.name === name) {
+                    let Employee = {
+                        id: e.id,
+                        name: e.name,
+                        address: add.address
+                    }
+                    return Employee;
+                }
+
+            });
+            console.log(Info);
+            break;
+        }
+    }
+
+}
+employees.forEach((emp) => displayEmployeeDetails(emp.name));
