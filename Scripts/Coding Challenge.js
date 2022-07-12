@@ -188,27 +188,27 @@ let name;
 let id;
 
 
-const displayEmployeeDetails = function (name) {
-    for (const e of employees) {
-        if (e.name == name) {
+const displayEmployeeDetails = function (id) {
+    for (let i=0; i<employees.length; i++) {
+        if (employees[i].id == id) {
             let Info = employees.map(e => {
-                let add = Addresses.filter(empl => e.name === empl.name);
-                //console.log(add[0])
+                let add = Addresses.filter(empl => e.id === empl.id);
 
-                if (e.name === name) {
+                if (e.id === id) {
                     let Employee = {
                         id: e.id,
                         name: e.name,
-                        address: add.address
+                        address: add[0].address
                     }
                     return Employee;
                 }
 
             });
-            console.log(Info);
+            console.log(Info[i]);
             break;
         }
     }
 
 }
-employees.forEach((emp) => displayEmployeeDetails(emp.name));
+employees.forEach((emp) => displayEmployeeDetails(emp.id));
+
